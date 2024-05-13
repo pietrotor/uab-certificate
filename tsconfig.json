@@ -1,0 +1,45 @@
+{
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  },
+  "plugins": [
+    {
+      "transform": "@zerollup/ts-transform-paths"
+    }
+  ],
+  "compilerOptions": {
+    "module": "commonjs",
+    "sourceMap": true,
+    "rootDir": "./src",
+    "baseUrl": "src",
+    "outDir": "./build",
+    "declaration": true,
+    "declarationMap": true,
+    "removeComments": true,
+    "moduleResolution": "node",
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": false,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "target": "es6",
+    "lib": ["ES6"],
+    "paths": {
+      "@/interfaces/*": ["./interfaces/*"],
+      "@/lib/*": ["./lib/*"],
+      "@/models/*": ["./models/*"],
+      "@/routes/*": ["./routes/*"],
+      "@/errors/*": ["./errors/*"],
+      "@/middlewares/*": ["./middlewares/*"]
+    },
+    "types": ["node"],
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "build"]
+}
