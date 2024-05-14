@@ -1,11 +1,12 @@
 import { Router } from 'express';
-import { ProfessionController } from 'controllers';
+import { ProfessionController, StudentController } from 'controllers';
 import { validateRequest } from '@/middlewares/validate-request';
 import { body, check } from 'express-validator';
 
 const professionsRoute = () => {
   const router = Router();
   const professionController = new ProfessionController();
+  const studentController = new StudentController();
 
   router.post(
     '/professions',
@@ -48,6 +49,7 @@ const professionsRoute = () => {
   );
 
   router.get('/professions/:professionId', professionController.getProfession);
+  router.get('/professions/:professionId/students', studentController.getStudentsByProfessions);
 
   return router;
 };

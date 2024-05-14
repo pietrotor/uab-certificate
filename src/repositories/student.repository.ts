@@ -10,6 +10,10 @@ export abstract class StudentsRepository {
 
   abstract removeProfessionFromStudents(params: GetByIdParmsDto): Promise<number>;
 
+  abstract getStudentsByProfession(params: GetByIdParmsDto): Promise<IStudent[]>;
+  abstract getMetrics(): Promise<{ profession: string; total: number }[]>;
+
   abstract getStudents(paginationDto: PaginationDto): Promise<PaginationResponse<IStudent> | BadRequestError>;
+  abstract getStudentsSorted(businessId: objectId): Promise<IStudent[] | BadRequestError>;
   abstract getStudentById(params: GetByIdParmsDto): Promise<IStudent | BadRequestError>;
 }

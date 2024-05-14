@@ -37,30 +37,27 @@ export class StudentsService implements StudentsRepository {
   }
 
   async updateStudent(studentDto: StudentDto) {
-    const { businessId, identificationDocument, professionsIds, _id } = studentDto;
-    const existsUser = await this.getUserByDocument({ businessId, identificationDocument });
-    if (existsUser?._id?.toString() !== _id?.toString())
-      throw new BadRequestError({
-        code: 400,
-        message: 'Estudiante ya registrado con ese documento',
-      });
-    await Promise.all(
-      professionsIds.map(async (profesionId) => {
-        await professionCore.getProfessionById({
-          businessId,
-          id: profesionId,
-        });
-      }),
-    );
     const studentUpdated = await Student.findOneAndUpdate(
       {
         _id: studentDto._id,
         deleted: false,
       },
       studentDto,
+      { new: true },
     );
 
     return studentUpdated!;
+  }
+
+  async getStudentsByProfession(params: GetByIdParmsDto) {
+    const { businessId, id } = params;
+    const studentUpdated = await Student.find({
+      deleted: false,
+      professionsIds: { $in: [id] },
+      businessId,
+    });
+
+    return studentUpdated;
   }
 
   async deleteStudent(id: objectId, businessId: objectId) {
@@ -78,7 +75,8 @@ export class StudentsService implements StudentsRepository {
         $or: [
           { name: { $regex: filter, $options: 'i' } },
           { lastName: { $regex: filter, $options: 'i' } },
-          { code: { $regex: filter, $options: 'i' } },
+          { studentCode: { $regex: filter, $options: 'i' } },
+          { identificationDocument: { $regex: filter, $options: 'i' } },
         ],
       };
       return await getInstancesPagination<IStudent, IModelStudent>({
@@ -113,5 +111,56 @@ export class StudentsService implements StudentsRepository {
     const updateResult = await Student.updateMany({ deleted: false, businessId, professionsIds: { $in: [id] } }, { $pull: { professionsIds: id } });
 
     return updateResult.modifiedCount;
+  }
+
+  async getMetrics() {
+    const pipeline = [
+      {
+        $match: {
+          deleted: false,
+        },
+      },
+      {
+        $unwind: '$professionsIds',
+      },
+      {
+        $lookup: {
+          from: 'professions',
+          localField: 'professionsIds',
+          foreignField: '_id',
+          as: 'profession',
+        },
+      },
+      {
+        $unwind: '$profession',
+      },
+      {
+        $group: {
+          _id: '$profession.title',
+          total: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          profession: '$_id',
+          total: 1,
+        },
+      },
+    ];
+    const metrics = await Student.aggregate<{ profession: string; total: number }>(pipeline);
+    return metrics;
+  }
+
+  async getStudentsSorted() {
+    const sorted = await Student.aggregate<any>([
+      {
+        $addFields: {
+          fullName: { $concat: ['$name', ' ', '$lastName'] },
+        },
+      },
+      { $sort: { fullName: 1 } },
+    ]);
+    return sorted;
   }
 }

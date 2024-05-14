@@ -20,19 +20,10 @@ const studentsRoute = () => {
     studentController.create,
   );
 
-  router.patch(
-    '/students/:studentId',
-    [
-      body('_id').notEmpty().withMessage('_id is required'),
-      body('name').notEmpty().withMessage('name is required'),
-      body('lastName').trim().notEmpty().withMessage('lastName is required'),
-      body('identificationDocument').trim().notEmpty().withMessage('identificationDocument is required'),
-      body('complement').trim(),
-      body('professionsIds').isArray().notEmpty().withMessage('professionsIds is required'),
-    ],
-    validateRequest,
-    studentController.update,
-  );
+  router.get('/students/metrics', studentController.getMetricts);
+  router.get('/students/sorted', studentController.sorted);
+
+  router.patch('/students/:studentId', studentController.update);
 
   router.delete('/students/:studentId', studentController.delete);
 
@@ -48,7 +39,6 @@ const studentsRoute = () => {
   );
 
   router.get('/students/:studentId', studentController.getUser);
-  router.get('/students/:studentId/degrees', studentController.getDegrees);
 
   return router;
 };
