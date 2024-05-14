@@ -1,24 +1,3 @@
-# Node Rest API with Swagger
+# SISTEMA AUTENTICADOR DE CERTIFICADOS
 
-This project is a REST API with all the endpoints documented built with Node.js and Express.
-
-## Prerequisites
-- Node.js 10+
-- Yarn or NPM
-
-## Installation
-- Install dependencies
-```bash
-yarn install
-```
-- Create local environment file
-```shell
-cp .env.example .env
-nano .env
-```
-- Start Application
-```bash
-yarn start
-```
-The application will be launched by [Nodemon](https://nodemon.com) so it's will restart automatically on file change
-# uab-certificate
+Desarrollar un Sistema Autenticador de certificados y títulos profesionales para Institutos Técnicos que permitira bajar la tasa de falsificación de documentación
