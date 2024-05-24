@@ -21,6 +21,7 @@ export class ProfessionController {
 
   public update = async (req: IRequest<ProfessionDto>, res: Response, next: NextFunction) => {
     try {
+      console.log('--- profession');
       const { professionId } = req.params;
       const professionDto = req.body;
       const professionInstance = await professionCore.updateProfession({

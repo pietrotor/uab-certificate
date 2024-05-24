@@ -1,7 +1,8 @@
 import { Router } from 'express';
-import { UserController } from 'controllers';
+import { UserController } from '../controllers';
 import { validateRequest } from '@/middlewares/validate-request';
 import { body, check } from 'express-validator';
+import { requireAuth } from '@/middlewares/require-auth';
 
 const userRoute = () => {
   const router = Router();
@@ -13,6 +14,10 @@ const userRoute = () => {
     validateRequest,
     userController.login,
   );
+
+  router.use(requireAuth);
+
+  router.post('/users/logout', userController.logOut);
 
   router.post(
     '/users',

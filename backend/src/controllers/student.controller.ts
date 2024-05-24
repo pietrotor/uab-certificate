@@ -1,7 +1,7 @@
 import { NextFunction, Response, Request } from 'express';
 import { IRequest } from '../interfaces';
 import { StudentDto } from 'dtos';
-import { studentCore } from 'services';
+import { studentCore } from '../services';
 
 export class StudentController {
   public create = async (req: IRequest<StudentDto>, res: Response, next: NextFunction) => {

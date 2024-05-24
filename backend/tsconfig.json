@@ -35,7 +35,7 @@
       "@/errors/*": ["./errors/*"],
       "@/middlewares/*": ["./middlewares/*"]
     },
-    "types": ["node"],
+    "types": ["node", "jest"],
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true

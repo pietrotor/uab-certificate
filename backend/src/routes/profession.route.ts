@@ -2,11 +2,14 @@ import { Router } from 'express';
 import { ProfessionController, StudentController } from 'controllers';
 import { validateRequest } from '@/middlewares/validate-request';
 import { body, check } from 'express-validator';
+import { requireAuth } from '@/middlewares/require-auth';
 
 const professionsRoute = () => {
   const router = Router();
   const professionController = new ProfessionController();
   const studentController = new StudentController();
+
+  router.use(requireAuth);
 
   router.post(
     '/professions',
@@ -21,19 +24,7 @@ const professionsRoute = () => {
     professionController.create,
   );
 
-  router.patch(
-    '/professions/:professionId',
-    [
-      body('_id').notEmpty().withMessage('_id is required'),
-      body('title').notEmpty().withMessage('title is required'),
-      body('internalTitle').trim().notEmpty().withMessage('internalTitle is required'),
-      body('last').trim().notEmpty().withMessage('last is required'),
-      body('level').trim().notEmpty().withMessage('level is required'),
-      body('code').trim().notEmpty().withMessage('code is required'),
-    ],
-    validateRequest,
-    professionController.update,
-  );
+  router.patch('/professions/:professionId', professionController.update);
 
   router.delete('/professions/:professionId', professionController.delete);
 

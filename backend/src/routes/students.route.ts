@@ -2,10 +2,13 @@ import { Router } from 'express';
 import { StudentController } from 'controllers';
 import { validateRequest } from '@/middlewares/validate-request';
 import { body, check } from 'express-validator';
+import { requireAuth } from '@/middlewares/require-auth';
 
 const studentsRoute = () => {
   const router = Router();
   const studentController = new StudentController();
+
+  router.use(requireAuth);
 
   router.post(
     '/students',

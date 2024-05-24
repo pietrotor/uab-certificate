@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
-import BadRequestError from '@/errors/BadRequestError';
-import { Password } from '@/lib/encrypt';
-import { IModelUser, IUser, User } from '@/models/index';
+import BadRequestError from '../errors/BadRequestError';
+import { Password } from '../lib/encrypt';
+import { IModelUser, IUser, User } from '../models/index';
 import { GetByIdParmsDto, LoginDto, PaginationDto, UserByEmailParamsDto, UserDto } from 'dtos';
 import { getInstancesPagination } from './generic.service';
 

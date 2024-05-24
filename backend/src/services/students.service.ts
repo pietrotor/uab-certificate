@@ -1,4 +1,4 @@
-import BadRequestError from '@/errors/BadRequestError';
+import BadRequestError from '../errors/BadRequestError';
 import { DocumentDto, GetByIdParmsDto, PaginationDto, StudentDto } from 'dtos';
 import { StudentsRepository } from 'repositories';
 import { IModelStudent, IStudent, Student } from '../models';
@@ -55,7 +55,7 @@ export class StudentsService implements StudentsRepository {
       deleted: false,
       professionsIds: { $in: [id] },
       businessId,
-    });
+    }).populate(['professionsIds']);
 
     return studentUpdated;
   }

@@ -1,9 +1,9 @@
-import BadRequestError from '@/errors/BadRequestError';
+import BadRequestError from '../errors/BadRequestError';
 import { GetByIdParmsDto, PaginationDto, ProfessionDto } from 'dtos';
 import { ProfessionsRepository } from 'repositories';
 import { IModelProfession, IProfession, Profession } from '../models';
 import { getInstancesPagination } from './generic.service';
-import { studentCore } from 'services';
+import { studentCore } from '../services';
 
 export class ProfessionsService implements ProfessionsRepository {
   private async getProfesionByTitle(title: string, businessId: objectId) {
@@ -29,7 +29,7 @@ export class ProfessionsService implements ProfessionsRepository {
     const { title, businessId, _id } = professionDto;
     await this.getProfessionById({ businessId, id: _id! });
     const existsProfession = await this.getProfesionByTitle(title, businessId);
-    console.log('🚀 ~ ProfessionsService ~ updateProfession ~ existsProfession:', existsProfession);
+
     if (existsProfession?._id?.toString() !== _id?.toString() && existsProfession)
       throw new BadRequestError({
         code: 400,
@@ -41,6 +41,7 @@ export class ProfessionsService implements ProfessionsRepository {
         deleted: false,
       },
       professionDto,
+      { new: true },
     );
 
     return professionUpdated!;

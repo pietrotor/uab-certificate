@@ -1,4 +1,4 @@
-import BadRequestError from '@/errors/BadRequestError';
+import BadRequestError from '../errors/BadRequestError';
 import { IStudent } from '@/models/index';
 import { DocumentDto, GetByIdParmsDto, PaginationDto, StudentDto } from 'dtos';
 import { PaginationResponse } from '../interfaces';

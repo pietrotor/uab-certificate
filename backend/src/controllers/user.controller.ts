@@ -1,15 +1,34 @@
 import { NextFunction, Response, Request } from 'express';
 import { IRequest } from '../interfaces';
 import { LoginDto, UserDto } from 'dtos';
-import { createUser, getUserById, getUsersPaginated, loginUser, updateUser } from 'services';
-import BadRequestError from '@/errors/BadRequestError';
+import { createUser, getUserById, getUsersPaginated, loginUser, updateUser } from '../services';
+import BadRequestError from '../errors/BadRequestError';
+import { BlackList } from '../models';
 
 export class UserController {
   public login = async (req: IRequest<LoginDto>, res: Response, next: NextFunction) => {
     try {
       const loginDto = req.body;
       const jwtInstance = await loginUser(loginDto);
-      return res.status(200).send(jwtInstance);
+      return res.status(200).send({
+        toke: jwtInstance,
+      });
+    } catch (error) {
+      console.log('🚀 ~ UserController ~ login= ~ error:', error);
+      next(error);
+    }
+  };
+
+  public logOut = async (req: IRequest<any>, res: Response, next: NextFunction) => {
+    try {
+      const token = req.currentUser.token;
+      const newToken = new BlackList({
+        token,
+      });
+      await newToken.save();
+      return res.status(200).send({
+        message: 'User sesion deleted',
+      });
     } catch (error) {
       console.log('🚀 ~ UserController ~ login= ~ error:', error);
       next(error);

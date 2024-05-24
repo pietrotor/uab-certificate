@@ -2,15 +2,25 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { UserPayload } from '@/interfaces/global.interface';
+import { BlackList } from '../models';
+import BadRequestError from '../errors/BadRequestError';
 dotenv.config();
-export const currentUser = (req: Request, _: Response, next: NextFunction) => {
+export const currentUser = async (req: Request, _: Response, next: NextFunction) => {
   if (req.headers.authorization) {
     console.log('🚀 ~ process.env.JWT_KEY:', process.env.JWT_KEY);
-    console.log('🚀 ~ req.headers.authorization:', req.headers.authorization);
     try {
       const payload = <UserPayload>jwt.verify(req.headers.authorization, process.env.JWT_KEY!);
-      console.log(payload);
-      req.currentUser = payload;
+      const isInBlackList = await BlackList.findOne({
+        token: req.headers.authorization,
+      });
+      console.log('🚀 ~ currentUser ~ isInBlackList:', isInBlackList);
+      if (isInBlackList) {
+        throw new BadRequestError({
+          code: 401,
+          message: 'Token no valido',
+        });
+      }
+      req.currentUser = { ...payload, token: req.headers.authorization };
     } catch (error) {
       console.log('error currentUser', error);
     }
