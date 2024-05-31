@@ -6,6 +6,7 @@ import { BlackList } from '../models';
 import BadRequestError from '../errors/BadRequestError';
 dotenv.config();
 export const currentUser = async (req: Request, _: Response, next: NextFunction) => {
+  console.log('------------ ACA ----------', req.headers.authorization);
   if (req.headers.authorization) {
     console.log('🚀 ~ process.env.JWT_KEY:', process.env.JWT_KEY);
     try {
@@ -20,7 +21,7 @@ export const currentUser = async (req: Request, _: Response, next: NextFunction)
           message: 'Token no valido',
         });
       }
-      req.currentUser = { ...payload, token: req.headers.authorization };
+      req.currentUser = { ...payload };
     } catch (error) {
       console.log('error currentUser', error);
     }

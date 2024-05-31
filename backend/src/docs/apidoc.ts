@@ -19,7 +19,7 @@ const apiDocumentation = {
   },
   servers: [
     {
-      url: 'http://localhost:4000/',
+      url: 'http://localhost:8080/',
       description: 'Local Server',
     },
     {

@@ -83,11 +83,13 @@ export class StudentsService implements StudentsRepository {
         db: Student,
         paginationInput: paginationDto,
         args: filterArgs,
+        populate: ['professionsIds'],
       });
     }
     return await getInstancesPagination<IStudent, IModelStudent>({
       db: Student,
       paginationInput: paginationDto,
+      populate: ['professionsIds'],
     });
   }
 

@@ -8,7 +8,7 @@ interface IBlackList extends Document, IGeneric {
 
 interface IModelBlackList extends Model<IBlackList> {}
 
-const blackListSchema = new Schema<IBlackList>(
+const blackListSchema = new Schema(
   {
     token: {
       type: String,
